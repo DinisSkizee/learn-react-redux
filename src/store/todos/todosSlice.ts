@@ -3,7 +3,7 @@ import { RootState } from "../store";
 import { fetchTodosAsync } from "./todosThunks";
 
 export interface Todo {
-  id: string;
+  id: number;
   text: string;
   completed: boolean;
 }
@@ -25,9 +25,18 @@ const todosSlice = createSlice({
   initialState,
   reducers: {
     addTodo: (state, action: PayloadAction<Todo>) => {
-      const lastId = state.todos[state.todos.length - 1].id;
-      action.payload.id = String(Number(lastId) + 1);
-      state.todos.push(action.payload);
+      const text = action.payload.text;
+      const lastId = state.todos.reduce(
+        (maxId, todo) => Math.max(maxId, todo.id),
+        0
+      );
+      const newTodo = {
+        id: lastId + 1,
+        text,
+        completed: false,
+      };
+
+      state.todos.push(newTodo);
     },
     removeTodo: (state, action: PayloadAction<Todo>) => {
       state.todos = state.todos.filter((todo) => todo.id !== action.payload.id);
