@@ -31,7 +31,15 @@ function App() {
       <div className="items-wrapper">
         {todos
           ?.slice()
-          .sort((a, b) => a.id - b.id)
+          .sort((a, b) => {
+            if (a.completed && !b.completed) {
+              return 1;
+            } else if (!a.completed && b.completed) {
+              return -1;
+            } else {
+              return a.id - b.id;
+            }
+          })
           .map((cur) => (
             <div className="item" key={cur.id}>
               <div className="item-wrapper">
