@@ -6,18 +6,13 @@ import {
   TODO_FAILURE,
 } from "./types";
 import { Todo } from "./todosSlice";
-
-const todosFetch = () => {
-  return fetch(
-    "https://my-json-server.typicode.com/DinisSkizee/learn-react-redux/todos"
-  ).then((response) => response.json());
-};
+import { fetchTodos } from "./todosService";
 
 function* workGetTodosFetch() {
   try {
-    const todos: Todo[] = yield call(todosFetch);
+    const todos: Todo[] = yield call(fetchTodos);
     console.log(todos);
-    yield put({ type: FETCH_TODOS_SUCCESS, todos });
+    yield put({ type: FETCH_TODOS_SUCCESS });
     yield put({ type: SET_TODOS, payload: todos });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {

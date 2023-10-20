@@ -10,13 +10,13 @@ function App() {
 
   useEffect(() => {
     dispatch({ type: FETCH_TODOS });
-  });
+  }, [dispatch]);
 
   return (
     <>
       <div>
         {todos?.map((cur) => (
-          <div>{cur.text}</div>
+          <div key={cur.id}>{cur.text}</div>
         ))}
       </div>
     </>
