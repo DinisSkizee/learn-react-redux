@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { fetchTodosAsync } from "./todosThunks";
+import { addTodoAsync, fetchTodosAsync } from "./todosThunks";
+import { createNewTodo } from "./todosService";
 
 export interface Todo {
   id: number;
@@ -24,17 +25,10 @@ const todosSlice = createSlice({
   name: "todos",
   initialState,
   reducers: {
-    addTodo: (state, action: PayloadAction<Todo>) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    addTodo: (state, action: any) => {
       const text = action.payload.text;
-      const lastId = state.todos.reduce(
-        (maxId, todo) => Math.max(maxId, todo.id),
-        0
-      );
-      const newTodo = {
-        id: lastId + 1,
-        text,
-        completed: false,
-      };
+      const newTodo = createNewTodo(text, state.todos);
 
       state.todos.push(newTodo);
     },
@@ -44,15 +38,27 @@ const todosSlice = createSlice({
     setTodos: (state, action: PayloadAction<Todo[]>) => {
       state.todos = [...action.payload];
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    completeTodo: (state, action: any) => {
+      const index = state.todos.findIndex(
+        (todo) => todo.id === action.payload.id
+      );
+      console.log(index);
+      state.todos[index].completed = true;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchTodosAsync.pending, (state) => {
       state.loading = true;
     });
+    builder.addCase(addTodoAsync.pending, (state) => {
+      state.loading = true;
+    });
   },
 });
 
-export const { addTodo, removeTodo, setTodos } = todosSlice.actions;
+export const { addTodo, removeTodo, setTodos, completeTodo } =
+  todosSlice.actions;
 
 export const selectTodos = (state: RootState) => state.todos.todos;
 

@@ -5,6 +5,7 @@ const REMOVE_TODO = "todos/removeTodo";
 const UPDATE_TODO = "todos/updateTodo";
 const SET_TODOS = "todos/setTodos";
 const ADD_TODO = "todos/addTodo";
+const COMPLETE_TODO = "todos/completeTodo";
 
 export {
   FETCH_TODOS_SUCCESS,
@@ -14,4 +15,5 @@ export {
   REMOVE_TODO,
   UPDATE_TODO,
   SET_TODOS,
+  COMPLETE_TODO,
 };

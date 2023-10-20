@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "./store/store";
 import { Todo } from "./store/todos/todosSlice";
 import { useEffect } from "react";
-import { ADD_TODO, FETCH_TODOS } from "./store/todos/types";
+import { ADD_TODO, FETCH_TODOS, COMPLETE_TODO } from "./store/todos/types";
 import "./App.sass";
 
 function App() {
@@ -24,16 +24,31 @@ function App() {
     }
   };
 
+  const handleCompleteTodo = (id: number) => {
+    dispatch({ type: COMPLETE_TODO, payload: { id: id } });
+  };
   return (
     <div className="wrapper">
       <div className="items-wrapper">
-        {todos?.map((cur) => (
-          <div key={cur.id}>
-            {cur.text}
-            <br />
-            <span>{cur.completed ? "Completed" : "Not Completed"}</span>
-          </div>
-        ))}
+        {todos
+          ?.slice()
+          .sort((a, b) => a.id - b.id)
+          .map((cur) => (
+            <div className="item" key={cur.id}>
+              <div className="item-wrapper">
+                <p>{cur.text}</p>
+                <p>
+                  {cur.completed ? (
+                    "Completed"
+                  ) : (
+                    <button onClick={() => handleCompleteTodo(cur.id)}>
+                      Complete
+                    </button>
+                  )}
+                </p>
+              </div>
+            </div>
+          ))}
       </div>
 
       <div className="add-item-wrapper">
@@ -41,6 +56,7 @@ function App() {
           <input
             id="new-todo-input"
             type="text"
+            placeholder={newTodoText}
             onChange={(e) => (newTodoText = e.target.value)}
           />
           <button onClick={handleAddTodo}>Add Item</button>

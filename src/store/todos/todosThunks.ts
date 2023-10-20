@@ -1,15 +1,16 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { fetchTodos } from "./todosService";
 import { FETCH_TODOS } from "./types";
+import { Todo } from "./todosSlice";
 
 export const addTodoAsync = createAsyncThunk(
   "todos/addTodo",
-  async (text: string) => {
+  async (todo: Todo) => {
     const response = await fetch(
       "https://my-json-server.typicode.com/DinisSkizee/learn-react-redux/todos",
       {
         method: "POST",
-        body: JSON.stringify({ text }),
+        body: JSON.stringify({ ...todo }),
         headers: {
           "Content-Type": "application/json",
         },
